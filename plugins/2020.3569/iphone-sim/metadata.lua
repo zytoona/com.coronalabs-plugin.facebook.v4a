@@ -7,7 +7,7 @@ local metadata =
 		frameworks = { 'Accounts', 'FBSDKCoreKit',  'FBSDKLoginKit', 'FBSDKShareKit', },
 		frameworksOptional = {},
 		delegates = { 'CoronaFacebookDelegate' }
-		-- usesSwift = true,
+		usesSwift = true,
 	},
 }
 

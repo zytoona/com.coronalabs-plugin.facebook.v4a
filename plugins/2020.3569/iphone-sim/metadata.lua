@@ -6,7 +6,7 @@ local metadata =
 		staticLibs = { 'plugin_facebook', },
 		frameworks = { 'Accounts', 'FBSDKCoreKit',  'FBSDKLoginKit', 'FBSDKShareKit', },
 		frameworksOptional = {},
-		delegates = { 'CoronaFacebookDelegate' }
+		delegates = { 'CoronaFacebookDelegate' },
 		usesSwift = true,
 	},
 }

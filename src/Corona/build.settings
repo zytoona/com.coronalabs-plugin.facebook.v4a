@@ -1,0 +1,92 @@
+--
+-- For more information on build.settings, see the Project Build Settings guide at:
+-- https://docs.coronalabs.com/guide/distribution/buildSettings
+--
+
+-- There are quite a few steps involved in getting an app to work with Facebook; you can start here:
+-- https://docs.coronalabs.com/guide/social/setupFacebook/index.html
+
+-- When you've got your Facebook App ID enter it here:
+local myFacebookAppID = "407318409718485"
+
+settings =
+{
+	orientation = {
+		-- Supported values for orientation:
+		-- portrait, portraitUpsideDown, landscapeLeft, landscapeRight
+		default = "portrait",
+		supported = { "portrait", "portraitUpsideDown" }
+	},
+
+	iphone =
+	{
+		xcassets = "Images.xcassets",
+		plist =
+		{
+			UIApplicationExitsOnSuspend = false,
+
+			CFBundleURLTypes =
+			{
+				{
+					CFBundleURLSchemes =
+					{
+						"fb" .. myFacebookAppID,
+					}
+				}
+			},
+			FacebookAutoLogAppEventsEnabled = false,
+			FacebookAdvertiserIDCollectionEnabled = false,
+			FacebookAppID = myFacebookAppID,
+			FacebookDisplayName = "Corona_Test_App",
+			UILaunchStoryboardName = "LaunchScreen",
+			ITSAppUsesNonExemptEncryption = false, -- This sample doesn't use custom encryption
+			LSApplicationQueriesSchemes =
+			{
+				"fb",  -- Needed for the facebook-v4.isFacebookAppEnabled() API
+				"fbapi",
+				"fbauth2",
+				"fb-messenger-api",
+				"fbshareextension",
+				"fbapi",
+				"fbapi20130214",
+				"fbapi20130410",
+				"fbapi20130702",
+				"fbapi20131010",
+				"fbapi20131219",
+				"fbapi20140410",
+				"fbapi20140116",
+				"fbapi20150313",
+				"fbapi20150629",
+				"fbapi20160328",
+				"fbauth",
+				"fb-messenger-share-api",
+			},
+		},
+	},
+
+	android =
+	{
+		facebookAppId = myFacebookAppID,
+
+        usesPermissions = {
+            "android.permission.INTERNET",
+        },
+
+	},
+
+	window =
+	{
+		titleText =
+		{
+			default = "Facebook",
+		},
+	},
+
+	plugins =
+	{
+        ["plugin.facebook.v4a"] =
+        {
+            publisherId = "com.coronalabs",
+        },
+	},
+}

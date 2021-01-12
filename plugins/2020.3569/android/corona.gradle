@@ -1,11 +1,5 @@
-
-// "metadata", "dependencies", "jars", "native", "resources", "assets"
-ext["excludeCoronaPlugin"] = true
-ext["includeCoronaPlugin"] = ["dependencies"]
-
 dependencies {
-    implementation 'com.facebook.android:facebook-core:5.11.2'
-    implementation 'com.facebook.android:facebook-login:5.11.2'
-    implementation 'com.facebook.android:facebook-share:5.11.2'
+    implementation("com.facebook.android:facebook-core:8.2.0")
+    implementation("com.facebook.android:facebook-login:8.2.0")
+    implementation("com.facebook.android:facebook-share:8.2.0")
 }
-

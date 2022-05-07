@@ -23,8 +23,6 @@ settings =
 		xcassets = "Images.xcassets",
 		plist =
 		{
-			UIApplicationExitsOnSuspend = false,
-
 			CFBundleURLTypes =
 			{
 				{

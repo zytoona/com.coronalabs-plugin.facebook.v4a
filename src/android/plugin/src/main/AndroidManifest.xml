@@ -4,7 +4,8 @@
     <application>
         <activity android:name="plugin.facebook.v4a.FacebookFragmentActivity"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
-            android:configChanges="keyboardHidden|screenSize|orientation"/>
+            android:configChanges="keyboardHidden|screenSize|orientation"
+            android:exported="false" />
 
     </application>
 

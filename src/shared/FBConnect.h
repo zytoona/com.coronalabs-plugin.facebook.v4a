@@ -52,6 +52,8 @@ class FBConnect
 		virtual void ShowDialog( lua_State *L, int index ) const = 0;
 		virtual void DispatchInit( lua_State *L ) const = 0;
 		virtual int GetSDKVersion( lua_State *L ) const = 0;
+        virtual int LogEvent( lua_State *L ) const = 0;
+    
 
 	private:
 		CoronaLuaRef fListener;

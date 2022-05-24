@@ -59,6 +59,7 @@ class FacebookLibrary
 		static int init( lua_State *L );
 		static int showDialog( lua_State *L );
 		static int getSDKVersion( lua_State *L );
+        static int logEvent( lua_State *L );
 
 	private:
 		static int ValueForKey( lua_State *L );
@@ -387,7 +388,15 @@ FacebookLibrary::getSDKVersion( lua_State *L )
 	FBConnect *connect = library->GetFBConnect();
 	return connect->GetSDKVersion( L );
 }
+int
+FacebookLibrary::logEvent( lua_State *L )
+{
+    Self *library = ToLibrary( L );
+    FBConnect *connect = library->GetFBConnect();
+    return connect->LogEvent( L );
+}
     
+
 // ----------------------------------------------------------------------------
 
 } // namespace Corona

@@ -217,7 +217,7 @@ local function listener( event )
     end
 end
 
-facebook.init(listener)
+--facebook.init(listener)
 
 local function buttonOnRelease( event )
 

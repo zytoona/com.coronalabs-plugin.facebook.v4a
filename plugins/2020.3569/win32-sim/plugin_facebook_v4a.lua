@@ -41,6 +41,7 @@ lib.init = defaultFunction
 lib.disableLoggingBehaviors = defaultFunction
 lib.enableLoggingBehaviors = defaultFunction
 lib.getSDKVersion = defaultFunction
+lib.logEvent = defaultFunction
 
 -- Introduced in Android Beta v1 and deprecated later
 lib.currentAccessToken = defaultFunctionReturnNil

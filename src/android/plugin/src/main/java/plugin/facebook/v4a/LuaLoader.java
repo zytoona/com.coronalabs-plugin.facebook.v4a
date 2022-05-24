@@ -8,6 +8,7 @@
 package plugin.facebook.v4a;
 
 import android.content.ActivityNotFoundException;
+import android.os.Bundle;
 import android.util.Log;
 
 import com.ansca.corona.CoronaActivity;
@@ -17,13 +18,17 @@ import com.ansca.corona.CoronaRuntime;
 import com.ansca.corona.CoronaRuntimeProvider;
 import com.ansca.corona.CoronaSystemApiHandler;
 import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsConstants;
+import com.facebook.appevents.AppEventsLogger;
 import com.naef.jnlua.JavaFunction;
 import com.naef.jnlua.LuaState;
 import com.naef.jnlua.LuaType;
 import com.naef.jnlua.NamedJavaFunction;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Map;
 
 // TODO: Null check Lua states in each namedJavaFunction.
 @SuppressWarnings("WeakerAccess")
@@ -31,6 +36,54 @@ public class LuaLoader implements JavaFunction {
 
 	// Set to true to compile in debug messages
 	private static final boolean Rtt_DEBUG = true; // false;
+
+	//App Event Name & Param
+	Map<String, String> AppEventName = new HashMap<String, String>()
+	{
+		{
+			put("achievedLevel", AppEventsConstants.EVENT_NAME_ACHIEVED_LEVEL);
+			put("adClick", AppEventsConstants.EVENT_NAME_AD_CLICK);
+			put("adImpression", AppEventsConstants.EVENT_NAME_AD_IMPRESSION);
+			put("addedPaymentInfo", AppEventsConstants.EVENT_NAME_ADDED_PAYMENT_INFO);
+			put("addedToCart", AppEventsConstants.EVENT_NAME_ADDED_TO_CART);
+			put("addedToWishlist", AppEventsConstants.EVENT_NAME_ADDED_TO_WISHLIST);
+			put("completedRegistration", AppEventsConstants.EVENT_NAME_COMPLETED_REGISTRATION);
+			put("completedTutorial", AppEventsConstants.EVENT_NAME_COMPLETED_TUTORIAL);
+			put("contact", AppEventsConstants.EVENT_NAME_CONTACT);
+			put("customizeProduct", AppEventsConstants.EVENT_NAME_CUSTOMIZE_PRODUCT);
+			put("donate", AppEventsConstants.EVENT_NAME_DONATE);
+			put("findLocation", AppEventsConstants.EVENT_NAME_FIND_LOCATION);
+			put("initiatedCheckout", AppEventsConstants.EVENT_NAME_INITIATED_CHECKOUT);
+			put("rated", AppEventsConstants.EVENT_NAME_RATED);
+			put("searched", AppEventsConstants.EVENT_NAME_SEARCHED);
+			put("spentCredits", AppEventsConstants.EVENT_NAME_SPENT_CREDITS);
+			put("startTrial", AppEventsConstants.EVENT_NAME_START_TRIAL);
+			put("submitApplication", AppEventsConstants.EVENT_NAME_SUBMIT_APPLICATION);
+			put("subscribe", AppEventsConstants.EVENT_NAME_SUBSCRIBE);
+			put("viewedContent", AppEventsConstants.EVENT_NAME_VIEWED_CONTENT);
+		}
+	};
+	Map<String, String> AppEventParams = new HashMap<String, String>()
+	{
+		{
+			put("adType", AppEventsConstants.EVENT_PARAM_AD_TYPE);
+			put("content", AppEventsConstants.EVENT_PARAM_CONTENT);
+			put("contentID", AppEventsConstants.EVENT_PARAM_CONTENT_ID);
+			put("contentType", AppEventsConstants.EVENT_PARAM_CONTENT_TYPE);
+			put("currency", AppEventsConstants.EVENT_PARAM_CURRENCY);
+			put("description", AppEventsConstants.EVENT_PARAM_DESCRIPTION);
+			put("level", AppEventsConstants.EVENT_PARAM_LEVEL);
+			put("maxRatingValue", AppEventsConstants.EVENT_PARAM_MAX_RATING_VALUE);
+			put("numItems", AppEventsConstants.EVENT_PARAM_NUM_ITEMS);
+			put("orderID", AppEventsConstants.EVENT_PARAM_ORDER_ID);
+			put("paymentInfoAvailable", AppEventsConstants.EVENT_PARAM_PAYMENT_INFO_AVAILABLE);
+			put("registrationMethod", AppEventsConstants.EVENT_PARAM_REGISTRATION_METHOD);
+			put("searchString", AppEventsConstants.EVENT_PARAM_SEARCH_STRING);
+			put("success", AppEventsConstants.EVENT_PARAM_SUCCESS);
+
+		}
+	};
+
 
 	@SuppressWarnings("FieldCanBeLocal")
 	private CoronaRuntime mRuntime;
@@ -72,6 +125,7 @@ public class LuaLoader implements JavaFunction {
 				new SetFBConnectListenerWrapper(),
 				new ShowDialogWrapper(),
 				new GetSDKVersionWrapper(),
+				new LogEvent(),
 		};
 
 		String libName = L.toString( 1 );
@@ -429,4 +483,67 @@ public class LuaLoader implements JavaFunction {
 			return 1;
 		}
 	}
+	private class LogEvent implements NamedJavaFunction
+	{
+		@Override
+		public String getName() {
+			return "logEvent";
+		}
+
+		@Override
+		public int invoke(LuaState L) {
+
+			AppEventsLogger logger = AppEventsLogger.newLogger(CoronaEnvironment.getCoronaActivity());
+			if(L.isString(1) && L.isNil(2)){
+				if(AppEventName.containsKey(L.toString(1))){
+					logger.logEvent(AppEventName.get(L.toString(1)));
+				}else{
+					logger.logEvent(L.toString(1));
+				}
+			}else if(L.isString(1) && L.isNumber(2)){
+				if(AppEventName.containsKey(L.toString(1))){
+					logger.logEvent(AppEventName.get(L.toString(1)), L.toNumber(2));
+				}else{
+					logger.logEvent(L.toString(1), L.toNumber(2));
+				}
+			}else if(L.isString(1) && L.isNumber(2)){
+				if(AppEventName.containsKey(L.toString(1))){
+					logger.logEvent(AppEventName.get(L.toString(1)), L.toNumber(2));
+				}else{
+					logger.logEvent(L.toString(1), L.toNumber(2));
+				}
+			}else if(L.isString(1) && L.isTable(2) && L.isNumber(3)){
+				Bundle appParams = new Bundle();
+				for(L.pushNil(); L.next(2); L.pop(1)){
+					String keyName =  L.toString(-2);
+					if(AppEventName.containsKey(keyName)){
+						keyName = AppEventParams.get(keyName);
+					}
+					appParams.putString(keyName, L.toString(-1));
+				}
+				if(AppEventName.containsKey(L.toString(1))){
+					logger.logEvent(AppEventName.get(L.toString(1)), L.toNumber(3), appParams);
+				}else{
+					logger.logEvent(L.toString(1), L.toNumber(3), appParams);
+				}
+
+			}else if(L.isString(1) && L.isTable(2)){
+				Bundle appParams = new Bundle();
+				for(L.pushNil(); L.next(2); L.pop(1)){
+					String keyName =  L.toString(-2);
+					if(AppEventName.containsKey(keyName)){
+						keyName = AppEventParams.get(keyName);
+					}
+					appParams.putString(keyName, L.toString(-1));
+				}
+				if(AppEventName.containsKey(L.toString(1))){
+					logger.logEvent(AppEventName.get(L.toString(1)), appParams);
+				}else{
+					logger.logEvent(L.toString(1),  appParams);
+				}
+			}
+			return 1;
+		}
+	}
+
 }

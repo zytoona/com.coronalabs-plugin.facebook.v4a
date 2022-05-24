@@ -19,8 +19,10 @@
 
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
+#import <FBSDKLoginKit/FBSDKLoginKit-Swift.h>
 #import <FBSDKShareKit/FBSDKShareKit.h>
-
+#import <FBSDKShareKit/FBSDKShareKit-Swift.h>
+#import <FBSDKGamingServicesKit/FBSDKGamingServicesKit-Swift.h>
 #import <Accounts/ACAccountStore.h>
 #import <Accounts/ACAccountType.h>
 
@@ -276,6 +278,49 @@ FBConnect::Delete( FBConnect *instance )
 
 const char IOSFBConnect::kLostAccessTokenError[] = ": lost the access token. This could be the result of another thread completing facebook.logout() before this callback was invoked.";
 	
+//Set up Enum for App Events Name https://developers.facebook.com/docs/app-events/reference#standard-events-2
+NSDictionary* IOSFBConnect::FBSDKAppEventNameDictionary =
+@{
+    @"achievedLevel" : FBSDKAppEventNameAchievedLevel,
+    @"adClick": FBSDKAppEventNameAdClick,
+    @"adImpression": FBSDKAppEventNameAdImpression,
+    @"addedPaymentInfo": FBSDKAppEventNameAddedPaymentInfo,
+    @"addedToCart": FBSDKAppEventNameAddedToCart,
+    @"addedToWishlist": FBSDKAppEventNameAddedToWishlist,
+    @"completedRegistration": FBSDKAppEventNameCompletedRegistration,
+    @"completedTutorial": FBSDKAppEventNameCompletedTutorial,
+    @"contact": FBSDKAppEventNameContact,
+    @"customizeProduct": FBSDKAppEventNameCustomizeProduct,
+    @"donate": FBSDKAppEventNameDonate,
+    @"findLocation": FBSDKAppEventNameFindLocation,
+    @"initiatedCheckout": FBSDKAppEventNameInitiatedCheckout,
+    @"rated": FBSDKAppEventNameRated,
+    @"searched": FBSDKAppEventNameSearched,
+    @"spentCredits": FBSDKAppEventNameSpentCredits,
+    @"startTrial": FBSDKAppEventNameStartTrial,
+    @"submitApplication": FBSDKAppEventNameSubmitApplication,
+    @"subscribe": FBSDKAppEventNameSubscribe,
+    @"viewedContent": FBSDKAppEventNameViewedContent,
+};
+//  Set up Enum for App Events Params https://developers.facebook.com/docs/app-events/reference#standard-event-parameters-2
+NSDictionary* IOSFBConnect::FBSDKAppEventParamsDictionary =
+@{
+    @"adType" : FBSDKAppEventParameterNameAdType,
+    @"content" : FBSDKAppEventParameterNameContent,
+    @"contentID": FBSDKAppEventParameterNameContentID,
+    @"contentType": FBSDKAppEventParameterNameContentType,
+    @"currency": FBSDKAppEventParameterNameCurrency,
+    @"description": FBSDKAppEventParameterNameDescription,
+    @"level": FBSDKAppEventParameterNameLevel,
+    @"maxRatingValue": FBSDKAppEventParameterNameMaxRatingValue,
+    @"numItems": FBSDKAppEventParameterNameNumItems,
+    @"orderID": FBSDKAppEventParameterNameOrderID,
+    @"paymentInfoAvailable": FBSDKAppEventParameterNamePaymentInfoAvailable,
+    @"registrationMethod": FBSDKAppEventParameterNameRegistrationMethod,
+    @"searchString": FBSDKAppEventParameterNameSearchString,
+    @"success": FBSDKAppEventParameterNameSuccess,
+};
+
 // Set up Enum - NSString conversion dictionaries.
 // From: http://stackoverflow.com/questions/13171907/best-way-to-enum-nsstring
 NSDictionary* IOSFBConnect::FBSDKGameRequestActionTypeDictionary =
@@ -292,6 +337,8 @@ NSDictionary* IOSFBConnect::FBSDKGameRequestFilterDictionary =
 	@"app_users" : @(FBSDKGameRequestFilterAppUsers),
 	@"app_non_users": @(FBSDKGameRequestFilterAppNonUsers)
    };
+
+
 	
 	
 IOSFBConnect::IOSFBConnect( id< CoronaRuntime > runtime )
@@ -1132,6 +1179,74 @@ IOSFBConnect::ShowDialog( lua_State *L, int index ) const
 	{
 		CORONA_LOG_ERROR( "%s", invalidParametersErrorMessage );
 	}
+}
+
+int
+IOSFBConnect::LogEvent( lua_State *L ) const
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if(lua_isstring(L, 1) && lua_isnil(L, 2)){
+            id eventName = [FBSDKAppEventNameDictionary objectForKey:[[NSString alloc] initWithUTF8String:lua_tostring(L, 1)]];
+            if(eventName){
+                [[FBSDKAppEvents shared] logEvent:eventName];
+            }else{
+                [[FBSDKAppEvents shared] logEvent:[[NSString alloc] initWithUTF8String:lua_tostring(L, 1)]];
+            }
+            
+        }else if (lua_isstring(L, 1) && lua_isnumber(L, 2)){
+            id eventName = [FBSDKAppEventNameDictionary objectForKey:[[NSString alloc] initWithUTF8String:lua_tostring(L, 1)]];
+            if(eventName){
+                [[FBSDKAppEvents shared] logEvent:eventName valueToSum:lua_tonumber(L, 2)];
+            }else{
+                [[FBSDKAppEvents shared] logEvent:[[NSString alloc] initWithUTF8String:lua_tostring(L, 1)] valueToSum:lua_tonumber(L, 2)];
+            }
+        }else if (lua_isstring(L, 1) && lua_istable(L, 2)  && lua_isnumber(L, 3)){
+            id eventName = [FBSDKAppEventNameDictionary objectForKey:[[NSString alloc] initWithUTF8String:lua_tostring(L, 1)]];
+            NSMutableDictionary * tempDic = [[NSMutableDictionary alloc] init];
+            for ( lua_pushnil( L ); lua_next( L, 2 ) != 0; lua_pop( L, 1 ) )
+            {
+                
+                NSString *keyName = [NSString stringWithUTF8String:lua_tostring(L, -2)];
+                id paramsName = [FBSDKAppEventParamsDictionary objectForKey:keyName];
+                NSString *value = [NSString stringWithUTF8String:lua_tostring(L, -1)];
+                if (paramsName) {
+                    [tempDic setValue:value forKey:paramsName];
+                }else{
+                    [tempDic setValue:value forKey:keyName];
+                }
+            }
+            if(eventName){
+                [[FBSDKAppEvents shared] logEvent:eventName valueToSum:lua_tonumber(L, 3) parameters:tempDic];
+            }else{
+                [[FBSDKAppEvents shared] logEvent:[[NSString alloc] initWithUTF8String:lua_tostring(L, 1)] valueToSum:lua_tonumber(L, 3) parameters:tempDic];
+            }
+        }else if (lua_isstring(L, 1) && lua_istable(L, 2)){
+            id eventName = [FBSDKAppEventNameDictionary objectForKey:[[NSString alloc] initWithUTF8String:lua_tostring(L, 1)]];
+            NSMutableDictionary * tempDic = [[NSMutableDictionary alloc] init];
+            for ( lua_pushnil( L ); lua_next( L, 2 ) != 0; lua_pop( L, 1 ) )
+            {
+                
+                NSString *keyName = [NSString stringWithUTF8String:lua_tostring(L, -2)];
+                id paramsName = [FBSDKAppEventParamsDictionary objectForKey:keyName];
+                NSString *value = [NSString stringWithUTF8String:lua_tostring(L, -1)];
+                if (paramsName) {
+                    [tempDic setValue:value forKey:paramsName];
+                }else{
+                    [tempDic setValue:value forKey:keyName];
+                }
+            }
+            if(eventName){
+                [[FBSDKAppEvents shared] logEvent:eventName parameters:tempDic];
+            }else{
+                [[FBSDKAppEvents shared] logEvent:[[NSString alloc] initWithUTF8String:lua_tostring(L, 1)] parameters:tempDic];
+            }
+        }else{
+            CORONA_LOG_ERROR( "Invaild Params .logEvent(eventName, [eventParams, valueSum])" );
+        }
+        
+        
+    });
+    return 0;
 }
 
 // ----------------------------------------------------------------------------

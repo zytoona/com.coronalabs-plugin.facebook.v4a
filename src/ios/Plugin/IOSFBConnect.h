@@ -18,8 +18,11 @@
 #import <UIKit/UIKit.h>
 #import <AddressBook/AddressBook.h>
 #import <AddressBookUI/AddressBookUI.h>
+#import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
 #import <FBSDKShareKit/FBSDKShareKit.h>
+#import <FBSDKShareKit/FBSDKShareKit-Swift.h>
+#import <FBSDKGamingServicesKit/FBSDKGamingServicesKit-Swift.h>
 
 // ----------------------------------------------------------------------------
 
@@ -70,6 +73,7 @@ class IOSFBConnect : public FBConnect
 		virtual void ShowDialog( lua_State *L, int index ) const;
 		virtual void DispatchInit( lua_State *L ) const;
 		virtual int GetSDKVersion( lua_State *L ) const;
+        virtual int LogEvent( lua_State *L ) const;
 
 	protected:
 		void LoginAppropriately( NSArray *permissions, bool limitedLogin ) const;
@@ -102,6 +106,8 @@ class IOSFBConnect : public FBConnect
 		static const char kLostAccessTokenError[];
 	
 		// Enum to NSString conversion dictionaries
+        static NSDictionary* FBSDKAppEventNameDictionary;
+        static NSDictionary* FBSDKAppEventParamsDictionary;
 		static NSDictionary* FBSDKGameRequestActionTypeDictionary;
 		static NSDictionary* FBSDKGameRequestFilterDictionary;
 };

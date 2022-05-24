@@ -69,6 +69,24 @@ class GraphObjectAdapter extends BaseAdapter implements SectionIndexer {
     private ArrayList<String> prefetchedProfilePictureIds = new ArrayList<String>();
     private OnErrorListener onErrorListener;
 
+    //since hasSameId was removed (v13)
+    private boolean hasSameId(JSONObject a, JSONObject b){
+        if(a == null || b == null || !a.has("id") || !b.has("id") ){
+            return false;
+        }
+        if(a == b){
+            return true;
+        }
+        String idA = a.optString("id");
+        String idB = b.optString("id");
+        if( idA == null || idB == null){
+            return false;
+        }else{
+            return idA == idB;
+        }
+    }
+
+
     public interface DataNeededListener {
         public void onDataNeeded();
     }
@@ -565,7 +583,8 @@ class GraphObjectAdapter extends BaseAdapter implements SectionIndexer {
 
         // Now find index of this item within that section.
         for (JSONObject t : graphObjectsBySection.get(sectionKey)) {
-            if (Utility.hasSameId(t, graphObject)) {
+
+            if (hasSameId(t, graphObject)) {
                 return position;
             }
             position++;

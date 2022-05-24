@@ -129,6 +129,19 @@ class FacebookController {
     public static final String INVALID_PARAMS_SHOW_DIALOG_ERR_MSG = ": Invalid parameters passed " +
             "to facebook.showDialog( action [, params] ).";
     /**
+     * getMetadata for App to check
+     */
+    public static Bundle getMetadata() {
+        try {
+            return CoronaEnvironment.getCoronaActivity().getPackageManager()
+                    .getApplicationInfo(CoronaEnvironment.getCoronaActivity().getPackageName(), PackageManager.GET_META_DATA)
+                    .metaData;
+        } catch (PackageManager.NameNotFoundException e) {
+            return null;
+        }
+    }
+
+    /**
      * Login callback
      */
     private static final FacebookCallback<LoginResult> loginCallback =
@@ -877,8 +890,23 @@ class FacebookController {
                         fbActivityResultHandler, 0xface); //100
                 if (!FacebookSdk.isInitialized()) {
                     // Initialize the Facebook SDK
-
-                    FacebookSdk.sdkInitialize(activity.getApplicationContext(), requestCodeOffset);
+                    if(getMetadata().containsKey("com.facebook.sdk.ClientToken")){
+                        FacebookSdk.sdkInitialize(activity.getApplicationContext(), requestCodeOffset);
+                    }else{
+                        //Show warning if no client Id
+                        AlertDialog fbWarningDialog = new AlertDialog.Builder(activity).create();
+                        fbWarningDialog.setTitle("Missing Facebook Client Token");
+                        fbWarningDialog.setMessage("Facebook now requires a client token which you are missing in your build.settings, see documentation for more information https://docs.coronalabs.com/plugin/facebook-v4a");
+                        fbWarningDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Ok",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                System.exit(0);
+                            }
+                        });
+                        fbWarningDialog.show();
+                        return;
+                    }
                 }
 
 				// Create our callback manager and set up forwarding of login results

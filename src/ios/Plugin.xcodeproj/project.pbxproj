@@ -10,9 +10,9 @@
 		DB04A957282C597000AE2DB7 /* FBAEMKit.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB04A951282C596F00AE2DB7 /* FBAEMKit.xcframework */; };
 		DB04A958282C597000AE2DB7 /* FBSDKCoreKit.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB04A952282C596F00AE2DB7 /* FBSDKCoreKit.xcframework */; };
 		DB04A959282C597000AE2DB7 /* FBSDKLoginKit.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB04A953282C596F00AE2DB7 /* FBSDKLoginKit.xcframework */; };
-		DB04A95A282C597000AE2DB7 /* FBSDKGamingServicesKit.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB04A954282C597000AE2DB7 /* FBSDKGamingServicesKit.xcframework */; };
 		DB04A95B282C597000AE2DB7 /* FBSDKShareKit.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB04A955282C597000AE2DB7 /* FBSDKShareKit.xcframework */; };
 		DB04A95C282C597000AE2DB7 /* FBSDKCoreKit_Basics.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB04A956282C597000AE2DB7 /* FBSDKCoreKit_Basics.xcframework */; };
+		DBB6F7F8283D7E81005DB1FA /* FBSDKGamingServicesKit.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = DBB6F7F7283D7E81005DB1FA /* FBSDKGamingServicesKit.xcframework */; };
 		F56B879A2370D5770091376E /* FacebookLibrary.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1C32EB1E203B222E00E81325 /* FacebookLibrary.cpp */; };
 		F56B879B2370D5770091376E /* FBConnect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1C32EB20203B222E00E81325 /* FBConnect.cpp */; };
 		F56B879C2370D5770091376E /* FBConnectEvent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1C32EB22203B222E00E81325 /* FBConnectEvent.cpp */; };
@@ -47,9 +47,9 @@
 		DB04A951282C596F00AE2DB7 /* FBAEMKit.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = FBAEMKit.xcframework; path = EmbeddedFrameworks/FBAEMKit.xcframework; sourceTree = "<group>"; };
 		DB04A952282C596F00AE2DB7 /* FBSDKCoreKit.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = FBSDKCoreKit.xcframework; path = EmbeddedFrameworks/FBSDKCoreKit.xcframework; sourceTree = "<group>"; };
 		DB04A953282C596F00AE2DB7 /* FBSDKLoginKit.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = FBSDKLoginKit.xcframework; path = EmbeddedFrameworks/FBSDKLoginKit.xcframework; sourceTree = "<group>"; };
-		DB04A954282C597000AE2DB7 /* FBSDKGamingServicesKit.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = FBSDKGamingServicesKit.xcframework; path = EmbeddedFrameworks/FBSDKGamingServicesKit.xcframework; sourceTree = "<group>"; };
 		DB04A955282C597000AE2DB7 /* FBSDKShareKit.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = FBSDKShareKit.xcframework; path = EmbeddedFrameworks/FBSDKShareKit.xcframework; sourceTree = "<group>"; };
 		DB04A956282C597000AE2DB7 /* FBSDKCoreKit_Basics.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = FBSDKCoreKit_Basics.xcframework; path = EmbeddedFrameworks/FBSDKCoreKit_Basics.xcframework; sourceTree = "<group>"; };
+		DBB6F7F7283D7E81005DB1FA /* FBSDKGamingServicesKit.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = FBSDKGamingServicesKit.xcframework; path = EmbeddedFrameworks/FBSDKGamingServicesKit.xcframework; sourceTree = "<group>"; };
 		F56B87882370AEF40091376E /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/Accounts.framework; sourceTree = DEVELOPER_DIR; };
 		F572F81A1EE0705B001BC814 /* CoronaNative.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = CoronaNative.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -62,8 +62,8 @@
 				DB04A958282C597000AE2DB7 /* FBSDKCoreKit.xcframework in Frameworks */,
 				DB04A95C282C597000AE2DB7 /* FBSDKCoreKit_Basics.xcframework in Frameworks */,
 				DB04A959282C597000AE2DB7 /* FBSDKLoginKit.xcframework in Frameworks */,
-				DB04A95A282C597000AE2DB7 /* FBSDKGamingServicesKit.xcframework in Frameworks */,
 				DB04A95B282C597000AE2DB7 /* FBSDKShareKit.xcframework in Frameworks */,
+				DBB6F7F8283D7E81005DB1FA /* FBSDKGamingServicesKit.xcframework in Frameworks */,
 				DB04A957282C597000AE2DB7 /* FBAEMKit.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -107,10 +107,10 @@
 		A484110E15114F700074BD57 = {
 			isa = PBXGroup;
 			children = (
+				DBB6F7F7283D7E81005DB1FA /* FBSDKGamingServicesKit.xcframework */,
 				DB04A951282C596F00AE2DB7 /* FBAEMKit.xcframework */,
 				DB04A956282C597000AE2DB7 /* FBSDKCoreKit_Basics.xcframework */,
 				DB04A952282C596F00AE2DB7 /* FBSDKCoreKit.xcframework */,
-				DB04A954282C597000AE2DB7 /* FBSDKGamingServicesKit.xcframework */,
 				DB04A953282C596F00AE2DB7 /* FBSDKLoginKit.xcframework */,
 				DB04A955282C597000AE2DB7 /* FBSDKShareKit.xcframework */,
 				1C32EB1D203B222E00E81325 /* shared */,
@@ -248,7 +248,7 @@
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
+				"EXCLUDED_ARCHS[sdk=*]" = armv7;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -302,7 +302,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
+				EXCLUDED_ARCHS = armv7;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -314,6 +314,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -324,6 +325,7 @@
 		A4E253C0166D6FB300DCDC2C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -344,6 +346,7 @@
 		A4E253C1166D6FB300DCDC2C /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;

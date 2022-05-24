@@ -115,7 +115,7 @@ build_plugin_structure() {
 
 
 
-build_plugin_structure "$OUTPUT_DIR/BuiltPlugin/iphone" iphoneos  " -extract armv7 -extract  arm64 " EmbeddedFrameworks
+build_plugin_structure "$OUTPUT_DIR/BuiltPlugin/iphone" iphoneos  " -extract  arm64 " EmbeddedFrameworks
 
 build_plugin_structure "$OUTPUT_DIR/BuiltPlugin/iphone-sim" iphonesimulator  " -extract i386  -extract  x86_64 " EmbeddedFrameworksSim
 
